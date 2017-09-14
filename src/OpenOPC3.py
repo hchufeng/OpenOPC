@@ -681,7 +681,7 @@ class client():
 
       try:
          def _valid_pair(p):
-            if type(p) in (list, tuple) and len(p) >= 2 and type(p[0]) in str:
+            if type(p) in (list, tuple) and len(p) >= 2 and type(p[0]) in (str,):
                return True
             else:
                return False
@@ -692,7 +692,7 @@ class client():
          if tag_value_pairs == None:
             tag_value_pairs = ['']
             single = False
-         elif type(tag_value_pairs[0]) in str:
+         elif type(tag_value_pairs[0]) in (str,):
             tag_value_pairs = [tag_value_pairs]
             single = True
          else:
@@ -851,7 +851,7 @@ class client():
       try:
          opc_groups = self._opc.OPCGroups
 
-         if type(groups) in str:
+         if type(groups) in (str,):
             groups = [groups]
             single = True
          else:
