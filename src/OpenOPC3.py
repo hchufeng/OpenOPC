@@ -30,7 +30,7 @@ if os.name == 'nt':
       import SystemHealth
       
       # Win32 variant types
-      vt = dict([(pythoncom.__dict__[vtype], vtype) for vtype in pythoncom.__dict__.keys() if vtype[:2] == "VT"])
+      vt = dict([(pythoncom.__dict__[vtype], vtype) for vtype in list(pythoncom.__dict__.keys()) if vtype[:2] == "VT"])
 
       # Allow gencache to create the cached wrapper objects
       win32com.client.gencache.is_readonly = False
@@ -77,7 +77,7 @@ def type_check(tags):
       tags = [tags]
       single = True
 
-   if len([t for t in tags if type(t) not in (str,)]) == 0:
+   if len([t for t in tags if type(t) not in (str,)]) == 0:#change before: if len([t for t in tags if type(t) not in str]) == 0
       valid = True
    else:
       valid = False
@@ -114,24 +114,21 @@ def exceptional(func, alt_return=None, alt_exceptions=(Exception,), final=None, 
 
 def get_sessions(host=None, port=7766):
    if host is None: host = 'localhost'
-   import Pyro.core
-   Pyro.core.initClient(banner = 0)
-   server_obj = Pyro.core.getProxyForURI("PYROLOC://%s:%s/opc" % (host, port))
+   import Pyro4.core
+   server_obj = Pyro4.Proxy("PYRO:opc@%s:%s" % (host, port))
    return server_obj.get_clients()
 
 def close_session(guid, host=None, port=7766):
    if host is None: host = 'localhost'
-   import Pyro.core
-   Pyro.core.initClient(banner = 0)
-   server_obj = Pyro.core.getProxyForURI("PYROLOC://%s:%s/opc" % (host, port))
+   import Pyro4.core
+   server_obj = Pyro4.Proxy("PYRO:opc@%s:%s" % (host, port))
    return server_obj.force_close(guid)
 
 def open_client(host='localhost', port=7766):
    """Connect to the specified OpenOPC Gateway Service"""
-   
-   import Pyro.core
-   Pyro.core.initClient(banner=0)
-   server_obj = Pyro.core.getProxyForURI("PYROLOC://%s:%s/opc" % (host, port))
+
+   import Pyro4.core
+   server_obj = Pyro4.Proxy("PYRO:opc@%s:%s" % (host, port))
    return server_obj.create_client()
 
 class TimeoutError(Exception):
@@ -158,7 +155,7 @@ class client():
       pythoncom.CoInitialize()
 
       if opc_class == None:
-         if ('OPC_CLASS') in os.environ:
+         if 'OPC_CLASS' in os.environ:
             opc_class = os.environ['OPC_CLASS']
          else:
             opc_class = OPC_CLASS
@@ -208,7 +205,7 @@ class client():
       if opc_server == None:
          # Initial connect using environment vars
          if self.opc_server == None:
-            if ('OPC_SERVER') in os.environ:
+            if 'OPC_SERVER' in os.environ:
                opc_server = os.environ['OPC_SERVER']
             else:
                opc_server = OPC_SERVER
@@ -263,6 +260,9 @@ class client():
       self._group_server_handles = {}
       self._group_handles_tag = {}
       self._group_hooks = {}
+
+   def GUID(self):
+      return self._open_guid
 
    def close(self, del_object=True):
       """Disconnect from the currently connected OPC server"""
@@ -340,7 +340,7 @@ class client():
          server_handles_tmp = []
          valid_tags.pop(0)
 
-         if  sub_group not in self._group_server_handles:
+         if sub_group not in self._group_server_handles:
             self._group_server_handles[sub_group] = {}
        
          for i, tag in enumerate(valid_tags):
@@ -377,7 +377,7 @@ class client():
 
          tags, single, valid = type_check(tags)
          if not valid:
-            raise TypeError( "iread(): 'tags' parameter must be a string or a list of strings")
+            raise TypeError("iread(): 'tags' parameter must be a string or a list of strings")
 
          # Group exists
          if group in self._groups and not rebuild:
@@ -843,7 +843,7 @@ class client():
 
    def groups(self):
       """Return a list of active tag groups"""
-      return self._groups.keys()
+      return list(self._groups.keys())
 
    def remove(self, groups):
       """Remove the specified tag group(s)"""
@@ -1018,7 +1018,7 @@ class client():
                browser.ShowLeafs(True)
 
                pattern = re.compile('^%s$' % wild2regex(path) , re.IGNORECASE)
-               matches = filter(pattern.search, browser)
+               matches = list(filter(pattern.search, browser))
                if include_type:  matches = [(x, node_type) for x in matches]
 
                for node in matches: yield node
@@ -1076,7 +1076,7 @@ class client():
                   lowest_level = False
                   node_type = 'Branch'
 
-               matches = filter(pattern.search, browser)
+               matches = list(filter(pattern.search, browser))
                
                if not lowest_level and recursive:
                   queue += [path_str + x + path_postfix for x in matches]
