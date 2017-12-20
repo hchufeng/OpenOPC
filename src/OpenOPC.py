@@ -161,7 +161,7 @@ class client():
       pythoncom.CoInitialize()
 
       if opc_class == None:
-	 if 'OPC_CLASS' in os.environ:
+         if 'OPC_CLASS' in os.environ:
             opc_class = os.environ['OPC_CLASS']
          else:
             opc_class = OPC_CLASS
@@ -176,7 +176,7 @@ class client():
          except pythoncom.com_error as  err:
             if i == len(opc_class_list)-1:
                error_msg = 'Dispatch: %s' % self._get_error_str(err)
-               raise OPCError, error_msg
+               raise OPCError(error_msg)
             
       self._event = win32event.CreateEvent(None,0,0,None)
 
@@ -367,7 +367,7 @@ class client():
 
          try:
             errors = opc_items.Remove(len(server_handles)-1, server_handles)
-         except pythoncom.com_error, err:
+         except pythoncom.com_error as err:
             error_msg = 'RemoveItems: %s' % self._get_error_str(err)
             raise OPCError(error_msg)
 
