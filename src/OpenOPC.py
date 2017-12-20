@@ -13,7 +13,9 @@ import types
 import string
 import socket
 import re
+import Pyro4.core
 import queue
+
 
 __version__ = '1.3.1'
 
@@ -553,7 +555,7 @@ class client():
                      tag_time[tag] = timestamps[i]
             
             for tag in tags:
-               if tag_value.has_key(tag):
+               if tag in tag_value:
                   if (not sync and len(valid_tags) > 0) or (sync and tag_error[tag] == 0):
                      value = tag_value[tag]
                      if type(value) == pywintypes.TimeType:
@@ -1087,7 +1089,7 @@ class client():
                   if lowest_level:  matches = [exceptional(browser.GetItemID,x)(x) for x in matches]
                   if include_type:  matches = [(x, node_type) for x in matches]
                   for node in matches:
-                     if not nodes.has_key(node): yield node
+                     if not node in nodes: yield node
                      nodes[node] = True
 
       except pythoncom.com_error as err:
