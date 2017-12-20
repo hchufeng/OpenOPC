@@ -1,3 +1,0 @@
-helloworld
-I'm user git
-Now use git learning
