@@ -58,7 +58,7 @@ BROWSER_TYPE = (0, 'Hierarchical', 'Flat')
 ACCESS_RIGHTS = (0, 'Read', 'Write', 'Read/Write')
 OPC_QUALITY = ('Bad', 'Uncertain', 'Unknown', 'Good')
 OPC_CLASS = 'Matrikon.OPC.Automation;Graybox.OPC.DAWrapper;HSCOPC.Automation;RSI.OPCAutomation;OPC.Automation'
-OPC_SERVER = 'Hci.TPNServer;HwHsc.OPCServer;opc.deltav.1;AIM.OPC.1;Yokogawa.ExaopcDAEXQ.1;OSI.DA.1;OPC.PHDServerDA.1;Aspen.Infoplus21_DA.1;National Instruments.OPCLabVIEW;RSLinx OPC Server;KEPware.KEPServerEx.V4;Matrikon.OPC.Simulation;Prosys.OPC.Simulation,Wellintech.OpcDaServer.1'
+OPC_SERVER = 'Hci.TPNServer;HwHsc.OPCServer;opc.deltav.1;AIM.OPC.1;Yokogawa.ExaopcDAEXQ.1;OSI.DA.1;OPC.PHDServerDA.1;Aspen.Infoplus21_DA.1;National Instruments.OPCLabVIEW;RSLinx OPC Server;KEPware.KEPServerEx.V4;Matrikon.OPC.Simulation;Prosys.OPC.Simulation,Wellintech.OpcDaServer'
 OPC_CLIENT = 'OpenOPC'
 
 def quality_str(quality_bits):
