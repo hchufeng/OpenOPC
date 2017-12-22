@@ -1170,7 +1170,7 @@ class client():
       
    def _get_error_str(self, err):
       """Return the error string for a OPC or COM error code"""
-
+      
       hr, msg, exc, arg = err
             
       if exc == None:
@@ -1179,12 +1179,12 @@ class client():
          scode = exc[5]
 
          try:
-            opc_err_str = unicode(self._opc.GetErrorString(scode)).strip('\r\n')
+            opc_err_str = (self._opc.GetErrorString(scode)).strip('\r\n')
          except:
             opc_err_str = None
 
          try:
-            com_err_str = unicode(pythoncom.GetScodeString(scode)).strip('\r\n')
+            com_err_str = (pythoncom.GetScodeString(scode)).strip('\r\n')
          except:
             com_err_str = None
 
