@@ -213,11 +213,9 @@ class client():
         self.trace = None
         self.cpu = None
 
-
     def set_trace(self, trace):
         if self._open_serv == None:
             self.trace = trace
-
 
     def connect(self, opc_server=None, opc_host='localhost'):
         """Connect to the specified OPC server"""
@@ -283,7 +281,6 @@ class client():
         self._group_handles_tag = {}
         self._group_hooks = {}
 
-
     def close(self, del_object=True):
         """Disconnect from the currently connected OPC server"""
 
@@ -304,7 +301,6 @@ class client():
             # Remove this object from the open gateway service
             if self._open_serv and del_object:
                 self._open_serv.release_client(self._open_self)
-
 
     def iread(self, tags=None, group=None, size=None, pause=0, source='hybrid', update=-1, timeout=5000, sync=False,
               include_error=False, rebuild=False):
@@ -523,7 +519,8 @@ class client():
                         if self.trace: self.trace('SyncRead(%s)' % data_source)
 
                         try:
-                            values, errors, qualities, timestamps = opc_group.SyncRead(data_source, len(server_handles) - 1,
+                            values, errors, qualities, timestamps = opc_group.SyncRead(data_source,
+                                                                                       len(server_handles) - 1,
                                                                                        server_handles)
                         except pythoncom.com_error as err:
                             error_msg = 'SyncRead: %s' % self._get_error_str(err)
@@ -624,7 +621,6 @@ class client():
             error_msg = 'read: %s' % self._get_error_str(err)
             raise OPCError(error_msg)
 
-
     def read(self, tags=None, group=None, size=None, pause=0, source='hybrid', update=-1, timeout=5000, sync=False,
              include_error=False, rebuild=False):
         """Return list of (value, quality, time) tuples for the specified tag(s)"""
@@ -647,7 +643,6 @@ class client():
             return list(results)[0]
         else:
             return list(results)
-
 
     def _read_health(self, tags):
         """Return values of special system health monitoring tags"""
@@ -708,7 +703,6 @@ class client():
                 results.append((t, value, quality, time_str))
 
         return results
-
 
     def iwrite(self, tag_value_pairs, size=None, pause=0, include_error=False):
         """Iterable version of write()"""
@@ -862,7 +856,6 @@ class client():
             error_msg = 'write: %s' % self._get_error_str(err)
             raise OPCError(error_msg)
 
-
     def write(self, tag_value_pairs, size=None, pause=0, include_error=False):
         """Write list of (tag, value) pair(s) to the server"""
 
@@ -878,11 +871,9 @@ class client():
         else:
             return list(status)
 
-
     def groups(self):
         """Return a list of active tag groups"""
         return self._groups.keys()
-
 
     def remove(self, groups):
         """Remove the specified tag group(s)"""
@@ -923,7 +914,6 @@ class client():
         except pythoncom.com_error as err:
             error_msg = 'remove: %s' % self._get_error_str(err)
             raise OPCError(error_msg)
-
 
     def iproperties(self, tags, id=None):
         """Iterable version of properties()"""
@@ -1018,7 +1008,6 @@ class client():
             error_msg = 'properties: %s' % self._get_error_str(err)
             raise OPCError(error_msg)
 
-
     def properties(self, tags, id=None):
         """Return list of property tuples (id, name, value) for the specified tag(s) """
 
@@ -1033,7 +1022,6 @@ class client():
             return list(props)[0]
         else:
             return list(props)
-
 
     def ilist(self, paths='*', recursive=False, flat=False, include_type=False):
         """Iterable version of list()"""
@@ -1133,13 +1121,11 @@ class client():
             error_msg = 'list: %s' % self._get_error_str(err)
             raise OPCError(error_msg)
 
-
     def list(self, paths='*', recursive=False, flat=False, include_type=False):
         """Return list of item nodes at specified path(s) (tree browser)"""
 
         nodes = self.ilist(paths, recursive, flat, include_type)
         return list(nodes)
-
 
     def servers(self, opc_host='localhost'):
         """Return list of available OPC servers"""
@@ -1153,7 +1139,6 @@ class client():
         except pythoncom.com_error as err:
             error_msg = 'servers: %s' % self._get_error_str(err)
             raise OPCError(error_msg)
-
 
     def info(self):
         """Return list of (name, value) pairs about the OPC server"""
@@ -1177,7 +1162,8 @@ class client():
             info_list += [('OPC Server', self._opc.ServerName)]
             info_list += [('State', OPC_STATUS[self._opc.ServerState])]
             info_list += [
-                ('Version', '%d.%d (Build %d)' % (self._opc.MajorVersion, self._opc.MinorVersion, self._opc.BuildNumber))]
+                ('Version',
+                 '%d.%d (Build %d)' % (self._opc.MajorVersion, self._opc.MinorVersion, self._opc.BuildNumber))]
 
             try:
                 browser = self._opc.CreateBrowser()
@@ -1196,7 +1182,6 @@ class client():
             error_msg = 'info: %s' % self._get_error_str(err)
             raise OPCError(error_msg)
 
-
     def ping(self):
         """Check if we are still talking to the OPC server"""
         try:
@@ -1209,7 +1194,6 @@ class client():
                 return True
         except pythoncom.com_error:
             return False
-
 
     def _get_error_str(self, err):
         """Return the error string for a OPC or COM error code"""
@@ -1247,12 +1231,10 @@ class client():
 
         return error_str
 
-
     def __getitem__(self, key):
         """Read single item (tag as dictionary key)"""
         value, quality, time = self.read(key)
         return value
-
 
     def __setitem__(self, key, value):
         """Write single item (tag as dictionary key)"""
